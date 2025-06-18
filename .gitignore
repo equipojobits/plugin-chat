@@ -1,0 +1,14 @@
+# Archivos y carpetas generados automáticamente
+node_modules/
+package-lock.json
+yarn.lock
+
+# Entornos de desarrollo
+.env
+.env.*
+.vscode/
+
+# Archivos de compilación de TypeScript/Vite
+dist/
+build/
+*.log

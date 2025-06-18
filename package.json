@@ -1,0 +1,26 @@
+{
+  "name": "plugin-chat",
+  "version": "1.0.0",
+  "description": "A chat plugin that separates the connection to n8n from the chat's design and functionality.",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "vite build"
+  },
+  "keywords": [
+    "chat",
+    "plugin",
+    "n8n"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "jest": "^27.0.0",
+    "typescript": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "vite": "^5.0.0"
+  }
+}
