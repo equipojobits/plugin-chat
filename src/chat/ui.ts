@@ -232,12 +232,28 @@ function injectStyles() {
     border-color: #d0d0d0;
     transform: translateY(-1px);
 }
+
+/* Media queries para móviles */
+@media (max-width: 600px) {
+  #myjobits-chat-widget-window {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  #myjobits-chat-widget-header .logo {
+    height: 28px;
+  }
+}
   `;
   document.head.appendChild(style);
 }
 
 function createWidgetElements() {
-  // Crear el contenedor principal
   let chatContainer = document.getElementById('myjobits-chat-widget-container');
   if (!chatContainer) {
     chatContainer = document.createElement('div');
@@ -254,7 +270,6 @@ function createWidgetElements() {
             <path d="M19 9L12 16L5 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     </div>
-
     <div id="myjobits-chat-widget-window">
         <div id="myjobits-chat-widget-header">
             <img src="https://myjobits.com/wp-content/uploads/2025/03/cropped-Favicon-White.png" alt="MyJobits Logo" class="logo">
@@ -274,7 +289,7 @@ function createWidgetElements() {
             <button id="myjobits-chat-widget-send-button">Enviar</button>
         </div>
         <div id="myjobits-chat-widget-footer" style="padding:8px;text-align:center;font-size:13px;color:#888;background:#fafafa;">
-          Power by Jobits 🤘
+          Power by <a href="https://www.myjobits.com" target="_blank" style="color:#000;text-decoration:underline;font-weight:500;">Jobits</a> 🤘
         </div>
     </div>
   `;
@@ -324,12 +339,25 @@ export function initChatWidget() {
   }
 
   function addMessage(data: { sender: 'user' | 'bot', text: string, options?: string[] }) {
-    if (!messagesContainer) return;
+    const messagesContainer = document.getElementById('myjobits-chat-widget-messages');
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', data.sender);
+    if (data.sender === 'bot') {
+      // Avatar para el bot
+      const avatar = document.createElement('img');
+      avatar.src = 'https://myjobits.com/wp-content/uploads/2025/03/cropped-Favicon-White.png';
+      avatar.alt = 'Bot';
+      avatar.style.width = '28px';
+      avatar.style.height = '28px';
+      avatar.style.borderRadius = '50%';
+      avatar.style.marginRight = '8px';
+      avatar.style.verticalAlign = 'middle';
+      messageDiv.appendChild(avatar);
+    }
     if (data.sender === 'bot' && data.options) {
       const messageText = document.createElement('p');
       messageText.innerText = data.text;
+      messageText.style.display = 'inline';
       messageDiv.appendChild(messageText);
       const optionsContainer = document.createElement('div');
       optionsContainer.classList.add('options-container');
@@ -338,6 +366,7 @@ export function initChatWidget() {
         optionButton.classList.add('option-button');
         optionButton.innerText = optionText;
         optionButton.addEventListener('click', () => {
+          const messageInput = document.getElementById('myjobits-chat-widget-input') as HTMLInputElement;
           messageInput.value = optionText;
           sendMessage();
         });
@@ -345,10 +374,15 @@ export function initChatWidget() {
       });
       messageDiv.appendChild(optionsContainer);
     } else {
-      messageDiv.innerText = data.text;
+      const textSpan = document.createElement('span');
+      textSpan.innerText = data.text;
+      textSpan.style.display = 'inline';
+      messageDiv.appendChild(textSpan);
     }
-    messagesContainer.appendChild(messageDiv);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    if (messagesContainer) {
+      messagesContainer.appendChild(messageDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
   }
 
   async function sendMessage() {
